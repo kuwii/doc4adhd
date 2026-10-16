@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>书名（与 h1 一致，说清主体）</title>
+<!-- 防闪烁：首次绘制前恢复主题 -->
+<script>
+(function(){var t=localStorage.getItem('dd-theme');if(!t)t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.setAttribute('data-theme',t);})();
+</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="theme-switcher">
+  <button class="theme-btn" data-theme="light" aria-label="亮色模式" title="亮色模式">☀️</button>
+  <button class="theme-btn" data-theme="dark" aria-label="暗色模式" title="暗色模式">🌙</button>
+</div>
+
+<div class="container">
+
+<header>
+  <h1>书名（说清这本书讲什么，不用比喻）</h1>
+  <p class="subtitle">引入核心比喻，顺带说清读完能知道什么，比如："其实就是租在别人家的储物柜：一句话讲清云存储到底把文件放哪了"</p>
+</header>
+
+<!-- 目录：每章一张卡片，编号 + 标题 + 一句带钩子的简介。
+     简介要能勾人（提问/反差/悬念），不要写"本章介绍XX"。
+     番外篇同样列在目录里，用 .side 变体（橙色编号）区分。 -->
+<nav class="toc">
+  <a class="toc-item" href="ch1.html">
+    <span class="num">1</span>
+    <span>
+      <span class="t">第一章标题</span>
+      <span class="d">一句带钩子的简介：抛出读者最好奇的那个问题</span>
+    </span>
+  </a>
+  <a class="toc-item" href="ch2.html">
+    <span class="num">2</span>
+    <span>
+      <span class="t">第二章标题</span>
+      <span class="d">一句带钩子的简介</span>
+    </span>
+  </a>
+  <a class="toc-item" href="ch3.html">
+    <span class="num">∞</span>
+    <span>
+      <span class="t">总结</span>
+      <span class="d">一行公式收束全书 + 一句读者带得走的话</span>
+    </span>
+  </a>
+  <a class="toc-item side" href="side-xxx.html">
+    <span class="num">番</span>
+    <span>
+      <span class="t">番外篇标题</span>
+      <span class="d">"读完正文你可能好奇：……"式的一句承接</span>
+    </span>
+  </a>
+</nav>
+
+<footer>基于 CC BY 4.0 发布 · 可选的落款</footer>
+
+</div>
+
+<script src="shared.js"></script>
+</body>
+</html>

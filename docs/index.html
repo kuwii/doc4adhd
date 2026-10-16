@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<!-- write4adhd 官网：单页自包含，中英双语（默认跟随浏览器语言，可切换并记住选择）。
+     页面样式/脚本与 write4adhd-book skill 的 assets/skeleton.html 同源。 -->
+<html lang="zh-CN" data-lang="zh" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>write4adhd · 给 coding agent 的写作小抄</title>
+<meta name="description" content="write4adhd：一套 agent skills，把“为没耐心的读者写作”的规矩塞进你的 coding agent，让它产出短章节、土味比喻、每章一句收束、带 Canvas 动画的科普文档。">
+<!-- 防闪烁：首次绘制前恢复主题与语言 -->
+<script>
+(function () {
+  var d = document.documentElement;
+  var t = localStorage.getItem('write4adhd-theme');
+  if (!t) t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  d.setAttribute('data-theme', t);
+  var l = localStorage.getItem('write4adhd-lang');
+  if (!l) l = (navigator.language || navigator.userLanguage || 'en').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en';
+  d.setAttribute('data-lang', l);
+  d.setAttribute('lang', l === 'zh' ? 'zh-CN' : 'en');
+})();
+</script>
+<style>
+:root {
+  --primary: #3b82f6;
+  --primary-light: #1e3a5f;
+  --primary-soft: #1e3a5f;
+  --text: #e2e8f0;
+  --text-muted: #94a3b8;
+  --text-light: #64748b;
+  --bg: #0f172a;
+  --surface: #1e293b;
+  --border: #334155;
+  --accent: #f97316;
+  --accent-light: #3d1f0a;
+  --green: #10b981;
+  --green-light: #0d2e1f;
+  --purple: #8b5cf6;
+  --purple-light: #2d1f4e;
+  --radius: 10px;
+  --max-width: 1152px;
+}
+
+[data-theme="light"] {
+  --primary: #2563eb;
+  --primary-light: #eff6ff;
+  --primary-soft: #dbeafe;
+  --text: #1e293b;
+  --text-muted: #64748b;
+  --text-light: #94a3b8;
+  --bg: #ffffff;
+  --surface: #f8fafc;
+  --border: #e2e8f0;
+  --accent: #ea580c;
+  --accent-light: #fff7ed;
+  --green: #059669;
+  --green-light: #ecfdf5;
+  --purple: #7c3aed;
+  --purple-light: #f5f3ff;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "Noto Sans CJK SC", sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.85;
+  font-size: 17px;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+header {
+  padding: 80px 0 48px;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 2.4em;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+header .subtitle {
+  font-size: 1.1em;
+  color: var(--text-muted);
+  font-weight: 400;
+  max-width: 34em;
+  margin: 0 auto;
+}
+
+/* ── 页内章节导航：随时知道读到哪了 ── */
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 28px;
+}
+.site-nav a {
+  font-size: 0.85em;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  transition: border-color 0.2s, color 0.2s;
+}
+.site-nav a:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.badge {
+  display: inline-block;
+  background: var(--primary-light);
+  color: var(--primary);
+  font-size: 0.8em;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+section {
+  padding: 32px 0;
+  border-bottom: 1px solid var(--border);
+  transition: border-color 0.3s;
+  scroll-margin-top: 24px;
+}
+
+section:last-of-type { border-bottom: none; }
+
+.closing {
+  text-align: center;
+  margin-top: 32px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+}
+
+h2 {
+  font-size: 1.5em;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+h2 .num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--primary);
+  color: white;
+  border-radius: 8px;
+  font-size: 0.75em;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+h3 {
+  font-size: 1.15em;
+  font-weight: 700;
+  margin: 24px 0 10px;
+  color: var(--text);
+}
+
+p {
+  margin-bottom: 14px;
+  color: var(--text);
+}
+
+p.muted {
+  color: var(--text-muted);
+  font-size: 0.95em;
+}
+
+strong { color: var(--accent); font-weight: 700; }
+
+/* em 用来标"学名"术语：强调色底纹胶囊 */
+em {
+  font-style: normal;
+  background: var(--accent-light);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.container a {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+.container a:hover { text-decoration: underline; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin: 20px 0;
+}
+
+.card p:last-child { margin-bottom: 0; }
+
+/* ── 代码 ── */
+code {
+  background: var(--primary-light);
+  color: var(--primary);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+}
+
+pre {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  margin: 16px 0;
+  overflow-x: auto;
+  line-height: 1.7;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+pre code {
+  background: none;
+  color: var(--text);
+  padding: 0;
+  font-size: 0.85em;
+  display: block;
+  white-space: pre;
+}
+
+pre .cmt { color: var(--text-light); }
+
+.diagram-wrap {
+  margin: 28px 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  text-align: center;
+}
+
+.diagram-wrap .caption {
+  font-size: 0.85em;
+  color: var(--text-muted);
+  margin-top: 10px;
+}
+
+/* ── 图表动画控制条 ── */
+.anim-bar {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.anim-btn {
+  font-family: inherit;
+  font-size: 0.78em;
+  padding: 4px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-muted);
+  cursor: pointer;
+  line-height: 1.6;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+.anim-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+canvas {
+  display: block;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+ul {
+  margin: 10px 0 16px 20px;
+}
+
+ul li {
+  margin-bottom: 6px;
+  color: var(--text);
+}
+
+ul.tight li { margin-bottom: 3px; }
+
+/* ── 全文核心公式框 ── */
+.formula-box {
+  background: linear-gradient(135deg, var(--primary-light), var(--purple-light));
+  border: 2px solid var(--primary);
+  border-radius: var(--radius);
+  padding: 28px;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.formula-box p {
+  font-size: 1.1em;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 0.04em;
+}
+
+.formula-box .big {
+  font-size: 1.6em;
+  font-weight: 800;
+  color: var(--primary);
+  display: block;
+  margin-top: 8px;
+}
+
+@media (max-width: 600px) {
+  .formula-box .big { font-size: 1.25em; }
+}
+
+footer {
+  padding: 48px 0;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9em;
+}
+
+footer .sep { color: var(--text-light); padding: 0 6px; }
+
+/* ── 横向流程胶囊链 ── */
+.flow-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 16px 0;
+  align-items: center;
+}
+
+.flow-step {
+  background: var(--primary-light);
+  color: var(--primary);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9em;
+}
+
+.arrow-sep {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+/* ── 自问自答 / 读者质疑框 ── */
+.callout {
+  background: var(--accent-light);
+  border-left: 3px solid var(--accent);
+  padding: 14px 18px;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  margin: 18px 0;
+}
+
+.callout p { margin: 0; }
+
+.callout.blue {
+  background: var(--primary-light);
+  border-left-color: var(--primary);
+}
+
+.end-mark {
+  text-align: center;
+  font-size: 1.5em;
+  color: var(--text-light);
+  padding: 24px 0;
+  letter-spacing: 0.3em;
+}
+
+.diagram-wrap, .callout, .card, .formula-box {
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+/* ── 左上角：GitHub 仓库链接（按钮就是 logo 本身，不留内边距） ── */
+.github-link {
+  position: fixed;
+  top: 16px;
+  left: 20px;
+  z-index: 100;
+  display: block;
+  width: 32px;
+  height: 32px;
+  line-height: 0;
+  border-radius: 6px;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.github-link:hover { opacity: 0.75; }
+.github-link:active { transform: scale(0.92); }
+.gh-logo { display: block; width: 100%; height: 100%; }
+[data-theme="dark"] .gh-logo.for-light,
+[data-theme="light"] .gh-logo.for-dark { display: none; }
+
+/* ── 右上角：语言切换 + 主题切换 ── */
+.topbar {
+  position: fixed;
+  top: 16px;
+  right: 20px;
+  display: flex;
+  gap: 8px;
+  z-index: 100;
+}
+.lang-btn, .theme-btn {
+  height: 36px;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.85em;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s, border-color 0.3s, color 0.3s;
+  line-height: 1;
+}
+.theme-btn { width: 36px; font-size: 1em; padding: 0; }
+.lang-btn { padding: 0 12px; }
+.lang-btn:hover, .theme-btn:hover { border-color: var(--primary); color: var(--primary); }
+[data-lang="zh"] .lang-btn[data-lang="zh"],
+[data-lang="en"] .lang-btn[data-lang="en"],
+[data-theme="light"] .theme-btn[data-theme="light"],
+[data-theme="dark"] .theme-btn[data-theme="dark"] {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+/* ── 双语内容：只显示当前语言的那一份 ── */
+[data-lang="zh"] .i18n.en { display: none; }
+[data-lang="en"] .i18n.zh { display: none; }
+
+@media (max-width: 600px) {
+  header { padding: 48px 0 32px; }
+  header h1 { font-size: 1.8em; }
+  section { padding: 24px 0; }
+  .closing { margin-top: 24px; padding-top: 24px; }
+  body { font-size: 16px; }
+  h2 { font-size: 1.3em; }
+  .topbar { top: 12px; right: 12px; }
+  .github-link { top: 12px; left: 12px; }
+}
+</style>
+</head>
+<body>
+
+<a class="github-link" href="https://github.com/kuwii/write4adhd" aria-label="GitHub" title="GitHub">
+  <img class="gh-logo for-dark" src="resources/github-white.svg" alt="" width="98" height="96">
+  <img class="gh-logo for-light" src="resources/github-black.svg" alt="" width="98" height="96">
+</a>
+
+<div class="topbar">
+  <button type="button" class="lang-btn" data-lang="zh" aria-label="切换到中文">中文</button>
+  <button type="button" class="lang-btn" data-lang="en" aria-label="Switch to English">EN</button>
+  <button type="button" class="theme-btn" data-theme="light" aria-label="亮色模式" title="亮色模式">☀️</button>
+  <button type="button" class="theme-btn" data-theme="dark" aria-label="暗色模式" title="暗色模式">🌙</button>
+</div>
+
+<div class="container">
+
+<header>
+  <span class="badge i18n zh">agent skills 集合</span>
+  <span class="badge i18n en">a set of agent skills</span>
+
+  <h1>write4adhd</h1>
+
+  <p class="subtitle i18n zh">把一张“写作小抄”塞进你的 coding agent 兜里，让它写出你真的读得下去的科普。</p>
+  <p class="subtitle i18n en">Slip a writing cheat-sheet into your coding agent's pocket, and it starts producing docs you'll actually finish.</p>
+
+  <nav class="site-nav">
+    <a href="#what"><span class="i18n zh">这是啥</span><span class="i18n en">What it is</span></a>
+    <a href="#result"><span class="i18n zh">长啥样</span><span class="i18n en">What you get</span></a>
+    <a href="#use"><span class="i18n zh">怎么用</span><span class="i18n en">How to use</span></a>
+    <a href="#tldr"><span class="i18n zh">一句话总结</span><span class="i18n en">TL;DR</span></a>
+  </nav>
+</header>
+
+<!-- ==================== 第 1 章 ==================== -->
+<section id="what">
+  <div class="i18n zh">
+    <h2><span class="num">1</span> 这是啥：往实习生兜里塞张小抄</h2>
+
+    <p>你让 AI 科普一个东西，它甩给你三千字，术语一个追一个，读到第三屏你就把标签页关了。这不是模型笨，是<strong>没人告诉它：你的读者坐不住</strong>。</p>
+
+    <p>这种“写给 agent 看的说明书”有个正式名字——<em>Agent Skills（技能包）</em>：一个装着规则和模板的文件夹，agent 动笔前会先翻一遍。</p>
+
+    <p>把你的 agent 想成一个<strong>手特别快的实习生</strong>：打字飞快、爱堆术语、不写大纲。write4adhd 干的事只有一件：往它兜里塞一张<strong>写作小抄</strong>。从此它每次动笔前，都会先摸一下兜。</p>
+
+    <div class="callout">
+      <p><strong>“小抄上到底写了啥？”</strong>——五条硬规矩：一个土味比喻贯穿全文、段落不许超过 4 行、每章末尾一句加粗的收束句、术语先说人话再给学名、图一律手绘 Canvas 还得会动。</p>
+    </div>
+
+    <p><strong>说白了：不是换了个更聪明的 AI，是给同一个 AI 换了一套“为没耐心的人写作”的规矩。</strong></p>
+  </div>
+
+  <div class="i18n en">
+    <h2><span class="num">1</span> What it is: a cheat-sheet for your intern</h2>
+
+    <p>You ask an AI to explain something. It hands back three thousand words, jargon stacked on jargon, and by the third screen you've closed the tab. That's not the model being dumb — <strong>nobody told it that your reader won't sit still</strong>.</p>
+
+    <p>This kind of "instruction manual written for an agent" has a proper name — <em>Agent Skills</em>: a folder of rules and templates the agent reads before it starts writing.</p>
+
+    <p>Picture your agent as a <strong>very fast intern</strong>: types like lightning, loves jargon, never outlines. All write4adhd does is slip a <strong>writing cheat-sheet</strong> into its pocket. From then on, it checks that pocket before every draft.</p>
+
+    <div class="callout">
+      <p><strong>"So what's on the cheat-sheet?"</strong> — Five hard rules: one homespun metaphor running the whole piece, no paragraph longer than 4 lines, a bolded closing line for every chapter, plain words before any term, and hand-drawn Canvas diagrams that actually move.</p>
+    </div>
+
+    <p><strong>Bottom line: it isn't a smarter AI — it's the same AI on a "write for the impatient" rulebook.</strong></p>
+  </div>
+</section>
+
+<!-- ==================== 第 2 章 ==================== -->
+<section id="result">
+  <div class="i18n zh">
+    <h2><span class="num">2</span> 装上之后，文章长成这样</h2>
+
+    <p>小抄进兜了，那效果呢？同一只手快的实习生，交出来的东西完全两样：</p>
+
+    <ul>
+      <li><strong>祛魅</strong>：读完你能用自己的话说出这东西是什么、难在哪，而不是“好像很厉害但没懂”；</li>
+      <li><strong>一个土味比喻贯穿全文</strong>：整篇只需要记住一件事；</li>
+      <li><strong>每章一句加粗的收束句</strong>：随时停下，随时接得上；</li>
+      <li><strong>段落不超过 4 行</strong>：段落墙在这里是违法的；</li>
+      <li><strong>手绘 Canvas 示意图 + 分步动画</strong>：默认播放、滚出屏幕自动暂停，还给你暂停 / 单步 / 重播三个按钮；</li>
+      <li><strong>产出即成品</strong>：单页自包含 HTML、分章多页书站、或 Markdown——亮暗主题、离线可用、零外部依赖。</li>
+    </ul>
+  </div>
+
+  <div class="i18n en">
+    <h2><span class="num">2</span> What your docs look like afterwards</h2>
+
+    <p>The cheat-sheet is in the pocket — so what changes? Same fast intern, completely different deliverable:</p>
+
+    <ul>
+      <li><strong>Demystified</strong>: you finish able to say in your own words what the thing is and where the hard part was, instead of "sounds impressive, still lost";</li>
+      <li><strong>One homespun metaphor, end to end</strong>: exactly one thing to remember;</li>
+      <li><strong>A bolded closing line for every chapter</strong>: stop anywhere, pick it back up anywhere;</li>
+      <li><strong>No paragraph longer than 4 lines</strong>: walls of text are illegal here;</li>
+      <li><strong>Hand-drawn Canvas diagrams with step animations</strong>: they autoplay, pause when you scroll away, and hand you pause / step / replay buttons;</li>
+      <li><strong>The output is a finished artifact</strong>: a single self-contained HTML page, a multi-page book site, or Markdown — light and dark themes, offline, zero external dependencies.</li>
+    </ul>
+  </div>
+
+  <div class="diagram-wrap">
+    <canvas id="fig-style" width="680" height="300"></canvas>
+    <p class="caption i18n zh">左边：一个术语追着另一个术语；右边：一个比喻撑到底，每章还给你一句能带走的收束句。（示意，非真实截图）</p>
+    <p class="caption i18n en">Left: one jargon term chasing the next. Right: one metaphor carrying the whole thing, plus a takeaway line per chapter. (Illustrative, not a real screenshot)</p>
+  </div>
+
+  <div class="i18n zh">
+    <div class="callout blue">
+      <p><strong>“动画会不会又变成新的注意力陷阱？”</strong>——不会。动画默认播放，但你一滚走它就自己停；想慢慢看就点“下一步”，一帧一帧喂给你。控制权在你手上，不在页面上。</p>
+    </div>
+
+    <p><strong>关键不是把文章写短，是把“能读完”当成硬指标。</strong></p>
+  </div>
+
+  <div class="i18n en">
+    <div class="callout blue">
+      <p><strong>"Don't animations just become a new attention trap?"</strong> — No. They autoplay, but pause themselves the moment you scroll away; want to take it slow, hit "step" and it feeds you one frame at a time. The controls belong to you, not to the page.</p>
+    </div>
+
+    <p><strong>The trick isn't writing less — it's treating "readable to the end" as a hard requirement.</strong></p>
+  </div>
+</section>
+
+<!-- ==================== 第 3 章 ==================== -->
+<section id="use">
+  <div class="i18n zh">
+    <h2><span class="num">3</span> 三步用起来</h2>
+
+    <p>回忆一下：skill 就是个文件夹，没有安装程序。所以“用起来”一共三步：</p>
+
+    <div class="flow-list">
+      <span class="flow-step">① 拷一个 skill 目录</span><span class="arrow-sep">→</span>
+      <span class="flow-step">② 跟 agent 说人话</span><span class="arrow-sep">→</span>
+      <span class="flow-step">③ 拿到能直接打开的 HTML</span>
+    </div>
+
+    <p>每个 skill 都有<strong>中英两个版本</strong>：规则和模板完全一样，区别只在产出文档的语言。两者同名，<strong>装一个就够</strong>——要写中文文档就拷 <code>skills-cn/</code> 的，要写英文就拷 <code>skills-en/</code> 的。</p>
+
+    <pre><code><span class="cmt"># 项目级：只有当前项目能用（英文版把 skills-cn 换成 skills-en）</span>
+cp -r skills-cn/write4adhd-book &lt;你的项目&gt;/.agents/skills/
+
+<span class="cmt"># 用户级：所有项目都能用</span>
+cp -r skills-cn/write4adhd-book ~/.agents/skills/</code></pre>
+
+    <p>然后在任何支持 <a href="https://agentskills.io/">Agent Skills</a> 的 agent（比如 pi）里直接点名：</p>
+
+    <pre><code>/skill:write4adhd-book 写一篇《什么是 Docker》</code></pre>
+
+    <p>懒得记命令？说人话也行：“用祛魅体给我科普一下 XXX”、“给这个项目写份零基础入门文档”。</p>
+
+    <div class="callout blue">
+      <p><strong>“为什么是 <code>cp</code> 而不是安装？”</strong>——因为 skill 就是一堆纯文本文件：没有依赖、不联网、不动你的 shell 配置。拷进去就生效，删掉就没了，搬家就再拷一次。</p>
+    </div>
+
+    <p><strong>装一个 skill 的成本，和拷一个文件夹一模一样。</strong></p>
+  </div>
+
+  <div class="i18n en">
+    <h2><span class="num">3</span> Three steps to use it</h2>
+
+    <p>Remember: a skill is just a folder — there's no installer. So "getting started" is three steps:</p>
+
+    <div class="flow-list">
+      <span class="flow-step">① Copy one skill folder</span><span class="arrow-sep">→</span>
+      <span class="flow-step">② Ask in plain words</span><span class="arrow-sep">→</span>
+      <span class="flow-step">③ Open the HTML it hands back</span>
+    </div>
+
+    <p>Every skill ships in <strong>two language variants</strong>: identical rules and templates, the only difference is the language it writes in. They share a name, so <strong>install just one</strong> — <code>skills-cn/</code> writes Chinese, <code>skills-en/</code> writes English.</p>
+
+    <pre><code><span class="cmt"># Project level: this project only (use skills-cn for the Chinese skill)</span>
+cp -r skills-en/write4adhd-book &lt;your-project&gt;/.agents/skills/
+
+<span class="cmt"># User level: every project</span>
+cp -r skills-en/write4adhd-book ~/.agents/skills/</code></pre>
+
+    <p>Then, in any agent that supports <a href="https://agentskills.io/">Agent Skills</a> (such as pi), call it by name:</p>
+
+    <pre><code>/skill:write4adhd-book write a plain-English primer on Docker</code></pre>
+
+    <p>Can't be bothered with commands? Just talk to it: "explain XXX like I've never heard of it", or "write a zero-background intro to this project".</p>
+
+    <div class="callout blue">
+      <p><strong>"Why a <code>cp</code> instead of an install?"</strong> — Because a skill is a pile of plain-text files: no dependencies, no network calls, nothing written into your shell config. Copy it in and it works; delete it and it's gone; moving machines means copying it again.</p>
+    </div>
+
+    <p><strong>Installing a skill costs exactly as much as copying a folder.</strong></p>
+  </div>
+
+  <div class="diagram-wrap">
+    <canvas id="fig-flow" width="680" height="280"></canvas>
+    <div class="anim-bar">
+      <button type="button" class="anim-btn" id="fig-flow-play" data-role="play">⏸ 暂停</button>
+      <button type="button" class="anim-btn" id="fig-flow-step" data-role="step">下一步 ▸</button>
+      <button type="button" class="anim-btn" id="fig-flow-reset" data-role="reset">↺ 重播</button>
+    </div>
+    <p class="caption i18n zh">你没多做什么，只是它动笔前多摸了一次兜——这就是 skill 的全部作用。（示意，非实际耗时）</p>
+    <p class="caption i18n en">You didn't do much more — it just checked its pocket once before writing. That's the entire job of a skill. (Illustrative, not real timings)</p>
+  </div>
+</section>
+
+<!-- ==================== 总结章 ==================== -->
+<section id="tldr">
+  <div class="i18n zh">
+    <h2><span class="num">∞</span> 总结</h2>
+
+    <p>这东西没什么魔法。剥开来看就一行公式：</p>
+
+    <div class="formula-box">
+      <p>write4adhd 的全部</p>
+      <span class="big">会写字的 agent + 一张小抄 = 读得下去的文章</span>
+    </div>
+
+    <div class="closing">
+      <p>把这一页压成一句话：</p>
+      <p><strong>“不是我不会读，是它兜里没小抄。”</strong></p>
+    </div>
+  </div>
+
+  <div class="i18n en">
+    <h2><span class="num">∞</span> TL;DR</h2>
+
+    <p>None of this is magic. Peel it back and it's one line:</p>
+
+    <div class="formula-box">
+      <p>All of write4adhd</p>
+      <span class="big">an agent that writes + one cheat-sheet = docs people finish</span>
+    </div>
+
+    <div class="closing">
+      <p>The whole page in one line:</p>
+      <p><strong>"It's not that I can't read — it had no cheat-sheet in its pocket."</strong></p>
+    </div>
+  </div>
+
+  <div class="end-mark">· · ·</div>
+</section>
+
+<footer>
+  <a href="https://github.com/kuwii/write4adhd">GitHub</a><span class="sep">·</span><a href="https://github.com/kuwii/write4adhd/blob/main/README.zh_CN.md"><span class="i18n zh">中文 README</span><span class="i18n en">README (中文)</span></a><span class="sep">·</span><a href="https://github.com/kuwii/write4adhd/blob/main/README.md"><span class="i18n zh">English README</span><span class="i18n en">English README</span></a><span class="sep">·</span><a href="https://github.com/kuwii/write4adhd/blob/main/LICENSE">MIT</a>
+  <p class="muted i18n zh" style="margin-top:10px">这一页本身就是用 write4adhd-book 写的。</p>
+  <p class="muted i18n en" style="margin-top:10px">This very page was written with write4adhd-book.</p>
+</footer>
+
+</div>
+
+<script>
+/* ── 双语辅助 ── */
+function curLang() { return document.documentElement.getAttribute('data-lang') === 'zh' ? 'zh' : 'en'; }
+function L(zh, en) { return curLang() === 'zh' ? zh : en; }
+
+/* 界面按钮文案（随语言切换） */
+var UI = {
+  pause:  ['⏸ 暂停', '⏸ Pause'],
+  play:   ['▶ 播放', '▶ Play'],
+  step:   ['下一步 ▸', 'Next step ▸'],
+  reset:  ['↺ 重播', '↺ Replay'],
+  title:  ['write4adhd · 给 coding agent 的写作小抄', 'write4adhd · a writing cheat-sheet for your coding agent'],
+  desc:   ['write4adhd：一套 agent skills，把“为没耐心的读者写作”的规矩塞进你的 coding agent，让它产出短章节、土味比喻、每章一句收束、带 Canvas 动画的科普文档。',
+           'write4adhd: a set of agent skills that teaches your coding agent to write for readers who won\'t sit still — short chapters, homespun metaphors, a closing line per chapter, animated Canvas diagrams.'],
+  github: ['在 GitHub 上查看仓库', 'View the repository on GitHub'],
+  light:  ['亮色模式', 'Light mode'],
+  dark:   ['暗色模式', 'Dark mode'],
+  toZh:   ['切换到中文', 'Switch to Chinese'],
+  toEn:   ['Switch to English', '切换到中文']
+};
+
+/* ── 读取当前主题色，使图表自动适配亮/暗色 ── */
+function getColors() {
+  var s = getComputedStyle(document.documentElement);
+  function v(n) { return (s.getPropertyValue(n) || '').trim(); }
+  return {
+    primary: v('--primary'), primaryLight: v('--primary-light'),
+    accent: v('--accent'),   accentLight: v('--accent-light'),
+    green: v('--green'),     greenLight: v('--green-light'),
+    purple: v('--purple'),   purpleLight: v('--purple-light'),
+    text: v('--text'), muted: v('--text-muted'), light: v('--text-light'),
+    surface: v('--surface'), border: v('--border'), bg: v('--bg')
+  };
+}
+
+/* 主题/语言变化时需要重绘的图表都注册到这里 */
+var __redraws = [];
+/* 语言变化时需要刷新按钮文案的钩子 */
+var __langHooks = [];
+
+/* ── 画布初始化：DPR 适配 + 等比缩放，窄屏不变形 ── */
+function setupCanvas(id, drawFn) {
+  var canvas = document.getElementById(id);
+  if (!canvas) return null;
+  var dpr = window.devicePixelRatio || 1;
+  var baseW = canvas.width, baseH = canvas.height; // 设计空间尺寸
+  var ctx = canvas.getContext('2d');
+  var cssW = baseW, cssH = baseH, scale = 1;
+
+  function paint() {
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, cssW, cssH);
+    ctx.save();
+    ctx.scale(scale, scale);
+    drawFn(ctx, baseW, baseH);
+    ctx.restore();
+  }
+
+  function resize() {
+    var rect = canvas.parentElement.getBoundingClientRect();
+    var w = Math.min(rect.width - 32, baseW);
+    var h = baseH * (w / baseW);
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    cssW = w; cssH = h; scale = w / baseW;
+    paint();
+  }
+
+  __redraws.push(resize);
+  resize();
+  window.addEventListener('resize', resize);
+  return { paint: paint, resize: resize, canvas: canvas };
+}
+
+/* ── 基础绘图工具 ── */
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.arcTo(x + w, y, x + w, y + r, r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+  ctx.lineTo(x + r, y + h);
+  ctx.arcTo(x, y + h, x, y + h - r, r);
+  ctx.lineTo(x, y + r);
+  ctx.arcTo(x, y, x + r, y, r);
+  ctx.closePath();
+}
+
+function drawArrow(ctx, x1, y1, x2, y2, color, width) {
+  color = color || '#64748b';
+  width = width || 2;
+  var angle = Math.atan2(y2 - y1, x2 - x1);
+  var headLen = 11;
+  ctx.strokeStyle = color;
+  ctx.lineWidth = width;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2 - headLen * 0.85 * Math.cos(angle), y2 - headLen * 0.85 * Math.sin(angle));
+  ctx.stroke();
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.moveTo(x2, y2);
+  ctx.lineTo(x2 - headLen * Math.cos(angle - 0.4), y2 - headLen * Math.sin(angle - 0.4));
+  ctx.lineTo(x2 - headLen * Math.cos(angle + 0.4), y2 - headLen * Math.sin(angle + 0.4));
+  ctx.closePath();
+  ctx.fill();
+}
+
+/* 支持多行文本（\n 换行）的圆角方框 */
+function drawBox(ctx, x, y, w, h, text, fill, border, textColor, fontSize) {
+  fontSize = fontSize || 14;
+  roundRect(ctx, x, y, w, h, 9);
+  ctx.fillStyle = fill;
+  ctx.fill();
+  ctx.strokeStyle = border;
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.fillStyle = textColor;
+  ctx.font = '600 ' + fontSize + 'px -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  var lines = String(text).split('\n');
+  var lh = fontSize * 1.25;
+  var startY = y + h / 2 - (lines.length - 1) * lh / 2;
+  for (var i = 0; i < lines.length; i++) {
+    ctx.fillText(lines[i], x + w / 2, startY + i * lh);
+  }
+}
+
+/* 支持多行 + 对齐的标签 */
+function drawLabel(ctx, x, y, text, color, size, align) {
+  color = color || '#64748b';
+  size = size || 13;
+  align = align || 'center';
+  ctx.fillStyle = color;
+  ctx.font = '500 ' + size + 'px -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif';
+  ctx.textAlign = align;
+  ctx.textBaseline = 'middle';
+  var lines = String(text).split('\n');
+  var lh = size * 1.3;
+  var startY = y - (lines.length - 1) * lh / 2;
+  for (var i = 0; i < lines.length; i++) {
+    ctx.fillText(lines[i], x, startY + i * lh);
+  }
+}
+
+/* ── 分步动画脚手架 ── */
+function setupAnim(id, spec) {
+  var anim = { step: 0, t: 0, playing: true };
+  var steps = spec.steps || 4;
+  var stepMs = spec.stepMs || 1300;
+  var view = setupCanvas(id, function (ctx, w, h) {
+    spec.draw(ctx, w, h, anim.step, anim.t);
+  });
+  if (!view) return null;
+
+  var visible = true, rafId = null, last = 0;
+  function syncPlay() {
+    var b = document.getElementById(id + '-play');
+    if (b) b.textContent = anim.playing ? L(UI.pause[0], UI.pause[1]) : L(UI.play[0], UI.play[1]);
+  }
+  function loop(ts) {
+    rafId = null;
+    if (!anim.playing || !visible) return;
+    if (!last) last = ts;
+    anim.t += (ts - last) / stepMs;
+    last = ts;
+    while (anim.t >= 1) { anim.t -= 1; anim.step = (anim.step + 1) % steps; }
+    view.paint();
+    rafId = requestAnimationFrame(loop);
+  }
+  function start() {
+    if (rafId == null && anim.playing && visible) { last = 0; rafId = requestAnimationFrame(loop); }
+  }
+  function stop() { if (rafId != null) { cancelAnimationFrame(rafId); rafId = null; } }
+
+  var playBtn = document.getElementById(id + '-play');
+  if (playBtn) playBtn.addEventListener('click', function () {
+    anim.playing = !anim.playing;
+    syncPlay();
+    if (anim.playing) start(); else stop();
+  });
+  var stepBtn = document.getElementById(id + '-step');
+  if (stepBtn) stepBtn.addEventListener('click', function () {
+    anim.playing = false; syncPlay(); stop();
+    anim.step = (anim.step + 1) % steps; anim.t = 0;
+    view.paint();
+  });
+  var resetBtn = document.getElementById(id + '-reset');
+  if (resetBtn) resetBtn.addEventListener('click', function () {
+    anim.step = 0; anim.t = 0; anim.playing = true;
+    syncPlay(); start();
+  });
+
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      visible = entries[0].isIntersecting;
+      if (visible) start(); else stop();
+    }, { threshold: 0.15 }).observe(view.canvas);
+  }
+
+  __langHooks.push(syncPlay);
+  syncPlay();
+  start();
+  return { anim: anim, view: view, start: start, stop: stop };
+}
+
+/* ==================== 图 1：有小抄 vs 没小抄（静态） ==================== */
+
+function drawPanel(ctx, x, y, w, h, title, lines, accent, fill, bodyColor) {
+  roundRect(ctx, x, y, w, h, 12);
+  ctx.fillStyle = fill;
+  ctx.fill();
+  ctx.strokeStyle = accent;
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  drawLabel(ctx, x + w / 2, y + 26, title, accent, 15);
+  ctx.strokeStyle = accent;
+  ctx.globalAlpha = 0.35;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(x + 18, y + 46);
+  ctx.lineTo(x + w - 18, y + 46);
+  ctx.stroke();
+  ctx.globalAlpha = 1;
+  drawLabel(ctx, x + w / 2, y + 56 + (h - 56) / 2, lines.join('\n'), bodyColor, 13);
+}
+
+setupCanvas('fig-style', function (ctx, w, h) {
+  var c = getColors();
+  var pw = 292, ph = 196, y = 62, lx = 24, rx = w - pw - 24;
+
+  drawLabel(ctx, w / 2, 28, L('同一个手快的实习生，交出来的两份稿子', 'Same fast intern, two very different drafts'), c.light, 13);
+
+  drawPanel(ctx, lx, y, pw, ph,
+    L('兜里没小抄', 'No cheat-sheet'),
+    L(['三千字一口气写完', '术语追着术语', '“综上所述……”', '满屏纯文字，没有图'],
+      ['3,000 words in one go', 'jargon explaining jargon', '"In conclusion, ..."', 'screen after screen of text']),
+    c.muted, c.surface, c.muted);
+
+  drawPanel(ctx, rx, y, pw, ph,
+    L('兜里有小抄', 'Cheat-sheet in pocket'),
+    L(['一章几百字，扫完', '一个比喻撑到底', '每章一句加粗的收束句', 'Canvas 图会动，能暂停'],
+      ['a few hundred words a chapter', 'one metaphor all the way', 'a bolded closing line each time', 'Canvas diagrams that move']),
+    c.primary, c.primaryLight, c.text);
+
+  drawArrow(ctx, lx + pw + 8, y + ph / 2, rx - 8, y + ph / 2, c.light, 2);
+  drawLabel(ctx, w / 2, h - 16, L('读者反应：关掉标签页  vs  “原来就这么回事”', 'Reader: closes the tab  vs  "Oh, that\'s all it was"'), c.muted, 12);
+});
+
+/* ==================== 图 2：从需求到成品（分步动画） ==================== */
+
+setupAnim('fig-flow', {
+  steps: 4,
+  stepMs: 1400,
+  draw: function (ctx, w, h, step, t) {
+    var c = getColors();
+    var labels = L(['① 你说人话\n“科普一下 X”', '② 它摸兜\n翻出小抄', '③ 按小抄写\n短章+比喻+收束句', '④ 交成品\n双击就能开'],
+                   ['① You ask\n"explain X"', '② It checks\nits pocket', '③ Writes short\n+ one metaphor', '④ Hands back\na page you open']);
+    var themes = [
+      [c.primaryLight, c.primary],
+      [c.accentLight, c.accent],
+      [c.greenLight, c.green],
+      [c.purpleLight, c.purple]
+    ];
+    var bw = 142, bh = 64, gap = (w - 4 * bw) / 5, y = h / 2 - bh / 2;
+    function cx(i) { return gap + i * (bw + gap) + bw / 2; }
+
+    for (var i = 0; i < 3; i++) {
+      drawArrow(ctx, cx(i) + bw / 2 + 6, h / 2, cx(i + 1) - bw / 2 - 6, h / 2, c.border, 2);
+    }
+    for (var j = 0; j < 4; j++) {
+      var hot = (j === step);
+      drawBox(ctx, cx(j) - bw / 2, y, bw, bh, labels[j],
+        hot ? themes[j][0] : c.surface,
+        hot ? themes[j][1] : c.border,
+        hot ? themes[j][1] : c.light, 12);
+    }
+    /* 移动小球：从当前节点滑向下一节点（末步回到起点，形成循环） */
+    var from = cx(step), to = cx((step + 1) % 4);
+    var ease = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+    var x = from + (to - from) * ease;
+    ctx.fillStyle = themes[step][1];
+    ctx.beginPath();
+    ctx.arc(x, h / 2 - 48, 7, 0, Math.PI * 2);
+    ctx.fill();
+    drawLabel(ctx, w / 2, 26, L('装上 skill 之后，一次写作请求发生了什么', 'What happens to one writing request once a skill is installed'), c.light, 13);
+    drawLabel(ctx, w / 2, h - 20, L('第 ' + (step + 1) + ' 步 / 共 4 步', 'Step ' + (step + 1) + ' of 4'), c.muted, 12);
+  }
+});
+
+/* ==================== 语言 / 主题切换 ==================== */
+
+function applyLang(lang) {
+  var html = document.documentElement;
+  html.setAttribute('data-lang', lang);
+  html.setAttribute('lang', lang === 'zh' ? 'zh-CN' : 'en');
+  document.title = L(UI.title[0], UI.title[1]);
+  var meta = document.querySelector('meta[name="description"]');
+  if (meta) meta.setAttribute('content', L(UI.desc[0], UI.desc[1]));
+
+  /* 动画条按钮文案 */
+  var stepBtn = document.getElementById('fig-flow-step');
+  var resetBtn = document.getElementById('fig-flow-reset');
+  if (stepBtn) stepBtn.textContent = L(UI.step[0], UI.step[1]);
+  if (resetBtn) resetBtn.textContent = L(UI.reset[0], UI.reset[1]);
+
+  /* GitHub 链接与主题/语言按钮的无障碍文案 */
+  var gh = document.querySelector('.github-link');
+  if (gh) {
+    gh.setAttribute('aria-label', L(UI.github[0], UI.github[1]));
+    gh.setAttribute('title', L(UI.github[0], UI.github[1]));
+  }
+  document.querySelectorAll('.theme-btn').forEach(function (btn) {
+    var isLight = btn.getAttribute('data-theme') === 'light';
+    var label = isLight ? L(UI.light[0], UI.light[1]) : L(UI.dark[0], UI.dark[1]);
+    btn.setAttribute('aria-label', label);
+    btn.setAttribute('title', label);
+  });
+  document.querySelectorAll('.lang-btn').forEach(function (btn) {
+    var isZh = btn.getAttribute('data-lang') === 'zh';
+    var label = isZh ? L(UI.toZh[0], UI.toZh[1]) : L(UI.toEn[0], UI.toEn[1]);
+    btn.setAttribute('aria-label', label);
+    btn.setAttribute('title', label);
+  });
+
+  __langHooks.forEach(function (fn) { fn(); });
+  __redraws.forEach(function (fn) { fn(); }); // 图表文字随语言重绘
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  var html = document.documentElement;
+
+  document.querySelectorAll('.lang-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var lang = this.getAttribute('data-lang');
+      localStorage.setItem('write4adhd-lang', lang);
+      applyLang(lang);
+    });
+  });
+
+  document.querySelectorAll('.theme-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var theme = this.getAttribute('data-theme');
+      html.setAttribute('data-theme', theme);
+      localStorage.setItem('write4adhd-theme', theme);
+      __redraws.forEach(function (fn) { fn(); }); // 切换主题时重绘图表
+    });
+  });
+
+  applyLang(curLang());
+});
+</script>
+</body>
+</html>

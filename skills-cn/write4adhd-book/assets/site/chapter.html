@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 N 章 · 章标题 - 书名</title>
+<!-- 防闪烁：首次绘制前恢复主题 -->
+<script>
+(function(){var t=localStorage.getItem('dd-theme');if(!t)t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.setAttribute('data-theme',t);})();
+</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="theme-switcher">
+  <button class="theme-btn" data-theme="light" aria-label="亮色模式" title="亮色模式">☀️</button>
+  <button class="theme-btn" data-theme="dark" aria-label="暗色模式" title="暗色模式">🌙</button>
+</div>
+
+<div class="container">
+
+<a class="back-link" href="index.html">← 目录</a>
+
+<header class="chapter-head">
+  <!-- 番外篇把 badge 文字换成"番外篇" -->
+  <span class="badge">第 N 章</span>
+  <h1>章标题（说清本章讲什么，不用比喻）</h1>
+  <p class="subtitle">本章导语：一句软性回顾上一章 + 一句抛出本章要解决的问题</p>
+</header>
+
+<!-- 一页承载 1~3 节。每节仍然是：小步快跑 + 段落不超 4 行 + 图 + 收束句。
+     章页独立可读：跳进来的读者靠导语里的软性回顾接上主线。 -->
+<section>
+  <h2><span class="num">N.1</span> 节标题</h2>
+
+  <p>正文。<strong>关键词加粗</strong>，一段只说一件事。</p>
+
+  <div class="callout">
+    <p><strong>"读者心里最可能冒出的质疑？"</strong>——立刻接住，用生活化类比回答。</p>
+  </div>
+
+  <div class="diagram-wrap">
+    <canvas id="canvas-ch1-demo" width="680" height="260"></canvas>
+    <p class="caption">人话图注：一句话点出这张图想让你看到什么，而不是"图 1：XX 架构"</p>
+  </div>
+
+  <p>节末收束句：<strong>一句独立成立的总结（句式跟着内容走，不必每次都用"说白了"）。</strong></p>
+</section>
+
+<section>
+  <h2><span class="num">N.2</span> 节标题</h2>
+
+  <p>需要动画的流程图：canvas 下放 .anim-bar 三按钮（id 约定 &lt;canvas-id&gt;-play / -step / -reset），
+  然后用 setupAnim() 接管。</p>
+
+  <p>章末收束句：<strong>不是 X，是 Y。</strong></p>
+</section>
+
+<!-- 上一章 / 目录 / 下一章：让读者随时知道读到哪了、下一步去哪 -->
+<nav class="pager">
+  <a href="ch1.html">← 上一章：标题</a>
+  <a href="index.html">目录</a>
+  <a href="ch3.html">下一章：标题 →</a>
+</nav>
+
+<div class="end-mark">· · ·</div>
+
+<footer>基于 CC BY 4.0 发布 · 可选的落款</footer>
+
+</div>
+
+<script src="shared.js"></script>
+<script>
+/* 本页专属的图表绘制代码。辅助函数（setupCanvas / setupAnim / drawBox /
+   drawArrow / drawLabel / getColors）都在 shared.js 里。 */
+
+setupCanvas('canvas-ch1-demo', function (ctx, w, h) {
+  var c = getColors();
+  var bw = 150, bh = 64, y = h / 2 - bh / 2;
+  drawBox(ctx, 40, y, bw, bh, '概念 A', c.primaryLight, c.primary, c.primary, 15);
+  drawArrow(ctx, 40 + bw + 8, h / 2, 40 + bw + 62, h / 2, c.muted, 2);
+  drawBox(ctx, 250, y, bw, bh, '概念 B', c.accentLight, c.accent, c.accent, 15);
+  drawArrow(ctx, 250 + bw + 8, h / 2, 250 + bw + 62, h / 2, c.muted, 2);
+  drawBox(ctx, 460, y, bw, bh, '概念 C', c.greenLight, c.green, c.green, 15);
+  drawLabel(ctx, w / 2, 36, '（示意，非实际比例）', c.light, 12);
+});
+</script>
+</body>
+</html>

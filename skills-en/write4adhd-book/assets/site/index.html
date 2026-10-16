@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Title (plain subject, same as h1)</title>
+<!-- Anti-flash: restore the theme before the first paint -->
+<script>
+(function(){var t=localStorage.getItem('dd-theme');if(!t)t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.setAttribute('data-theme',t);})();
+</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="theme-switcher">
+  <button class="theme-btn" data-theme="light" aria-label="Light mode" title="Light mode">☀️</button>
+  <button class="theme-btn" data-theme="dark" aria-label="Dark mode" title="Dark mode">🌙</button>
+</div>
+
+<div class="container">
+
+<header>
+  <h1>Book title (plainly name the subject - no metaphor here)</h1>
+  <p class="subtitle">Bring in the core metaphor and say what the reader will know by the end. E.g. "Turns out it's just a locker you rent inside someone else's gym: cloud storage in one sentence, including where your files actually sit"</p>
+</header>
+
+<!-- Table of contents: one card per chapter, number + title + one hooky blurb.
+     The blurb has to pull the reader in (a question, a reversal, some suspense) -
+     never "This chapter introduces XX".
+     Bonus pages are listed here too, using the .side variant (orange badge) to tell them apart. -->
+<nav class="toc">
+  <a class="toc-item" href="ch1.html">
+    <span class="num">1</span>
+    <span>
+      <span class="t">Chapter 1 title</span>
+      <span class="d">One hooky blurb: ask the thing the reader is most curious about</span>
+    </span>
+  </a>
+  <a class="toc-item" href="ch2.html">
+    <span class="num">2</span>
+    <span>
+      <span class="t">Chapter 2 title</span>
+      <span class="d">One hooky blurb</span>
+    </span>
+  </a>
+  <a class="toc-item" href="ch3.html">
+    <span class="num">∞</span>
+    <span>
+      <span class="t">Wrap-up</span>
+      <span class="d">One formula that compresses the whole book + one line the reader can carry away</span>
+    </span>
+  </a>
+  <a class="toc-item side" href="side-xxx.html">
+    <span class="num">B</span>
+    <span>
+      <span class="t">Bonus page title</span>
+      <span class="d">One hand-off line in the "After reading the main piece, you might be wondering: …" shape</span>
+    </span>
+  </a>
+</nav>
+
+<footer>Published under CC BY 4.0 · optional colophon</footer>
+
+</div>
+
+<script src="shared.js"></script>
+</body>
+</html>

@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<!-- 单页自包含模板（短文章，1~3 页）；分章书站请用 site/ 目录模板。
+     内联的 CSS/JS 与 site/style.css、site/shared.js 同源，修改时注意两处同步。 -->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>文章标题（与 h1 一致，说清主体）</title>
+<!-- 防闪烁：首次绘制前恢复主题（localStorage key 按项目自定） -->
+<script>
+(function(){var t=localStorage.getItem('dd-theme');if(!t)t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.setAttribute('data-theme',t);})();
+</script>
+<style>
+:root {
+  --primary: #3b82f6;
+  --primary-light: #1e3a5f;
+  --primary-soft: #1e3a5f;
+  --text: #e2e8f0;
+  --text-muted: #94a3b8;
+  --text-light: #64748b;
+  --bg: #0f172a;
+  --surface: #1e293b;
+  --border: #334155;
+  --accent: #f97316;
+  --accent-light: #3d1f0a;
+  --green: #10b981;
+  --green-light: #0d2e1f;
+  --purple: #8b5cf6;
+  --purple-light: #2d1f4e;
+  --radius: 10px;
+  --max-width: 1152px;
+}
+
+[data-theme="light"] {
+  --primary: #2563eb;
+  --primary-light: #eff6ff;
+  --primary-soft: #dbeafe;
+  --text: #1e293b;
+  --text-muted: #64748b;
+  --text-light: #94a3b8;
+  --bg: #ffffff;
+  --surface: #f8fafc;
+  --border: #e2e8f0;
+  --accent: #ea580c;
+  --accent-light: #fff7ed;
+  --green: #059669;
+  --green-light: #ecfdf5;
+  --purple: #7c3aed;
+  --purple-light: #f5f3ff;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "Noto Sans CJK SC", sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.85;
+  font-size: 17px;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+header {
+  padding: 80px 0 48px;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 2.4em;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+header .subtitle {
+  font-size: 1.1em;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+/* 番外篇页首徽章 */
+.badge {
+  display: inline-block;
+  background: var(--primary-light);
+  color: var(--primary);
+  font-size: 0.8em;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+section {
+  padding: 32px 0;
+  border-bottom: 1px solid var(--border);
+  transition: border-color 0.3s;
+}
+
+section:last-of-type { border-bottom: none; }
+
+.closing {
+  text-align: center;
+  margin-top: 32px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+}
+
+h2 {
+  font-size: 1.5em;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+h2 .num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--primary);
+  color: white;
+  border-radius: 8px;
+  font-size: 0.75em;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+h3 {
+  font-size: 1.15em;
+  font-weight: 700;
+  margin: 24px 0 10px;
+  color: var(--text);
+}
+
+p {
+  margin-bottom: 14px;
+  color: var(--text);
+}
+
+p.muted {
+  color: var(--text-muted);
+  font-size: 0.95em;
+}
+
+strong { color: var(--accent); font-weight: 700; }
+
+/* em 用来标"学名"术语：强调色底纹胶囊 */
+em {
+  font-style: normal;
+  background: var(--accent-light);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.container a {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+.container a:hover { text-decoration: underline; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin: 20px 0;
+}
+
+.card code {
+  background: var(--primary-light);
+  color: var(--primary);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+}
+
+.diagram-wrap {
+  margin: 28px 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  text-align: center;
+}
+
+.diagram-wrap .caption {
+  font-size: 0.85em;
+  color: var(--text-muted);
+  margin-top: 10px;
+}
+
+/* ── 图表动画控制条 ── */
+.anim-bar {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.anim-btn {
+  font-family: inherit;
+  font-size: 0.78em;
+  padding: 4px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-muted);
+  cursor: pointer;
+  line-height: 1.6;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+.anim-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+canvas {
+  display: block;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+ul {
+  margin: 10px 0 16px 20px;
+}
+
+ul li {
+  margin-bottom: 6px;
+  color: var(--text);
+}
+
+ul.tight li { margin-bottom: 3px; }
+
+/* ── 全文核心公式框 ── */
+.formula-box {
+  background: linear-gradient(135deg, var(--primary-light), var(--purple-light));
+  border: 2px solid var(--primary);
+  border-radius: var(--radius);
+  padding: 28px;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.formula-box p {
+  font-size: 1.1em;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 0.04em;
+}
+
+.formula-box .big {
+  font-size: 1.6em;
+  font-weight: 800;
+  color: var(--primary);
+  display: block;
+  margin-top: 8px;
+}
+
+footer {
+  padding: 48px 0;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9em;
+}
+
+/* ── 横向流程胶囊链 ── */
+.flow-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.flow-step {
+  background: var(--primary-light);
+  color: var(--primary);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9em;
+  white-space: nowrap;
+}
+
+.arrow-sep {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+/* ── 自问自答 / 读者质疑框 ── */
+.callout {
+  background: var(--accent-light);
+  border-left: 3px solid var(--accent);
+  padding: 14px 18px;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  margin: 18px 0;
+}
+
+.callout p { margin: 0; }
+
+.callout.blue {
+  background: var(--primary-light);
+  border-left-color: var(--primary);
+}
+
+.end-mark {
+  text-align: center;
+  font-size: 1.5em;
+  color: var(--text-light);
+  padding: 24px 0;
+  letter-spacing: 0.3em;
+}
+
+.diagram-wrap, .callout, .card, .formula-box {
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+/* ── 主题切换按钮 ── */
+.theme-switcher {
+  position: fixed;
+  top: 16px;
+  right: 20px;
+  display: flex;
+  gap: 8px;
+  z-index: 100;
+}
+.theme-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s, border-color 0.3s, color 0.3s;
+  line-height: 1;
+  padding: 0;
+}
+.theme-btn:hover {
+  border-color: var(--primary);
+}
+[data-theme="light"] .theme-btn[data-theme="light"],
+[data-theme="dark"] .theme-btn[data-theme="dark"] {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+@media (max-width: 600px) {
+  header { padding: 48px 0 32px; }
+  header h1 { font-size: 1.8em; }
+  section { padding: 24px 0; }
+  .closing { margin-top: 24px; padding-top: 24px; }
+  body { font-size: 16px; }
+  h2 { font-size: 1.3em; }
+}
+</style>
+</head>
+<body>
+
+<div class="theme-switcher">
+  <button class="theme-btn" data-theme="light" aria-label="亮色模式" title="亮色模式">☀️</button>
+  <button class="theme-btn" data-theme="dark" aria-label="暗色模式" title="暗色模式">🌙</button>
+</div>
+
+<div class="container">
+
+<header>
+  <!-- 番外篇在 h1 前加：<span class="badge">番外篇</span> 和"← 回到主页"链接 -->
+  <h1>文章标题（说清本文讲什么，不用比喻）</h1>
+  <p class="subtitle">引入核心比喻，顺带说清读完能知道什么，比如："其实就是租在别人家的储物柜：一句话讲清云存储到底把文件放哪了"</p>
+</header>
+
+<!-- ==================== 第 1 章 ==================== -->
+<section>
+  <h2><span class="num">1</span> 章节标题：一个土味比喻</h2>
+
+  <p>开篇第一段：先大白话描述现象，别急着给定义。<strong>关键词加粗</strong>，一段只说一件事，连续纯文字不超过 4 行。</p>
+
+  <p>引出学名时走三步法：先描述现象，再给学名——<em>术语（English Term）</em>——然后一句直觉解释，点到为止。</p>
+
+  <h3>小标题：替读者问出心里的疑问</h3>
+
+  <div class="callout">
+    <p><strong>"读者心里最可能冒出的质疑？"</strong>——对，然后立刻接住它，用生活化类比回答。</p>
+  </div>
+
+  <!-- 静态示意图：设计空间尺寸宽 680 左右 -->
+  <div class="diagram-wrap">
+    <canvas id="canvas-demo-static" width="680" height="260"></canvas>
+    <p class="caption">人话图注：一句话点出这张图想让你看到什么，而不是"图 1：XX 架构"</p>
+  </div>
+
+  <p>章末收束句：<strong>一句独立成立、单拎出来也能读的总结（句式跟着内容走，不必每次都用"说白了"）。</strong></p>
+</section>
+
+<!-- ==================== 第 2 章 ==================== -->
+<section>
+  <h2><span class="num">2</span> 章节标题（开头一句软性回顾上一章）</h2>
+
+  <p>回忆一下上一章：……本章接着讲新东西。流程类步骤可以用横向胶囊链：</p>
+
+  <div class="flow-list">
+    <span class="flow-step">① 第一步</span><span class="arrow-sep">→</span>
+    <span class="flow-step">② 第二步</span><span class="arrow-sep">→</span>
+    <span class="flow-step">③ 第三步</span><span class="arrow-sep">→</span>
+    <span class="flow-step">④ 第四步</span>
+  </div>
+
+  <!-- 分步动画图：默认自动播放、滚出视口暂停、三按钮控制 -->
+  <div class="diagram-wrap">
+    <canvas id="canvas-demo-anim" width="680" height="280"></canvas>
+    <div class="anim-bar">
+      <button type="button" class="anim-btn" id="canvas-demo-anim-play">⏸ 暂停</button>
+      <button type="button" class="anim-btn" id="canvas-demo-anim-step">下一步 ▸</button>
+      <button type="button" class="anim-btn" id="canvas-demo-anim-reset">↺ 重播</button>
+    </div>
+    <p class="caption">人话图注：动画在演示什么，一句话讲穿</p>
+  </div>
+
+  <div class="card">
+    <p>补充说明放卡片里，行内代码用 <code>code 样式</code>。卡片也是打断段落墙的好工具。</p>
+  </div>
+
+  <p>章末收束句：<strong>不是 X，是 Y。</strong></p>
+</section>
+
+<!-- ==================== 总结章 ==================== -->
+<section>
+  <h2><span class="num">∞</span> 总结</h2>
+
+  <p>开头一句：这东西不是什么魔法。剥开来看就一句话：</p>
+
+  <div class="formula-box">
+    <p>全文核心公式</p>
+    <span class="big">前台 + 传菜口 + 后厨 = 外卖</span>
+  </div>
+
+  <div class="closing">
+    <p>把全文压成一句读者带得走的话：</p>
+    <p><strong>"一句能转述给朋友的总结：可以俏皮，但先把话说准。"</strong></p>
+  </div>
+
+  <div class="end-mark">· · ·</div>
+</section>
+
+<footer>基于 CC BY 4.0 发布 · 可选的落款</footer>
+
+</div>
+
+<script>
+/* ── 读取当前主题色，使图表自动适配亮/暗色 ── */
+function getColors() {
+  var s = getComputedStyle(document.documentElement);
+  function v(n) { return (s.getPropertyValue(n) || '').trim(); }
+  return {
+    primary: v('--primary'), primaryLight: v('--primary-light'),
+    accent: v('--accent'),   accentLight: v('--accent-light'),
+    green: v('--green'),     greenLight: v('--green-light'),
+    purple: v('--purple'),   purpleLight: v('--purple-light'),
+    text: v('--text'), muted: v('--text-muted'), light: v('--text-light'),
+    surface: v('--surface'), border: v('--border'), bg: v('--bg')
+  };
+}
+
+/* 主题切换时需要重绘的图表都注册到这里 */
+var __redraws = [];
+
+/* ── 画布初始化：DPR 适配 + 等比缩放，窄屏不变形 ── */
+function setupCanvas(id, drawFn) {
+  var canvas = document.getElementById(id);
+  if (!canvas) return null;
+  var dpr = window.devicePixelRatio || 1;
+  var baseW = canvas.width, baseH = canvas.height; // 设计空间尺寸
+  var ctx = canvas.getContext('2d');
+  var cssW = baseW, cssH = baseH, scale = 1;
+
+  function paint() {
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, cssW, cssH);
+    ctx.save();
+    ctx.scale(scale, scale);
+    drawFn(ctx, baseW, baseH);
+    ctx.restore();
+  }
+
+  function resize() {
+    var rect = canvas.parentElement.getBoundingClientRect();
+    var w = Math.min(rect.width - 32, baseW);
+    var h = baseH * (w / baseW);
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    cssW = w; cssH = h; scale = w / baseW;
+    paint();
+  }
+
+  __redraws.push(resize);
+  resize();
+  window.addEventListener('resize', resize);
+  return { paint: paint, resize: resize, canvas: canvas };
+}
+
+/* ── 基础绘图工具 ── */
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.arcTo(x + w, y, x + w, y + r, r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+  ctx.lineTo(x + r, y + h);
+  ctx.arcTo(x, y + h, x, y + h - r, r);
+  ctx.lineTo(x, y + r);
+  ctx.arcTo(x, y, x + r, y, r);
+  ctx.closePath();
+}
+
+function drawArrow(ctx, x1, y1, x2, y2, color, width) {
+  color = color || '#64748b';
+  width = width || 2;
+  var angle = Math.atan2(y2 - y1, x2 - x1);
+  var headLen = 11;
+  ctx.strokeStyle = color;
+  ctx.lineWidth = width;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2 - headLen * 0.85 * Math.cos(angle), y2 - headLen * 0.85 * Math.sin(angle));
+  ctx.stroke();
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.moveTo(x2, y2);
+  ctx.lineTo(x2 - headLen * Math.cos(angle - 0.4), y2 - headLen * Math.sin(angle - 0.4));
+  ctx.lineTo(x2 - headLen * Math.cos(angle + 0.4), y2 - headLen * Math.sin(angle + 0.4));
+  ctx.closePath();
+  ctx.fill();
+}
+
+/* 支持多行文本（\n 换行）的圆角方框 */
+function drawBox(ctx, x, y, w, h, text, fill, border, textColor, fontSize) {
+  fontSize = fontSize || 14;
+  roundRect(ctx, x, y, w, h, 9);
+  ctx.fillStyle = fill;
+  ctx.fill();
+  ctx.strokeStyle = border;
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.fillStyle = textColor;
+  ctx.font = '600 ' + fontSize + 'px -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  var lines = String(text).split('\n');
+  var lh = fontSize * 1.25;
+  var startY = y + h / 2 - (lines.length - 1) * lh / 2;
+  for (var i = 0; i < lines.length; i++) {
+    ctx.fillText(lines[i], x + w / 2, startY + i * lh);
+  }
+}
+
+/* 支持多行 + 对齐的标签 */
+function drawLabel(ctx, x, y, text, color, size, align) {
+  color = color || '#64748b';
+  size = size || 13;
+  align = align || 'center';
+  ctx.fillStyle = color;
+  ctx.font = '500 ' + size + 'px -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif';
+  ctx.textAlign = align;
+  ctx.textBaseline = 'middle';
+  var lines = String(text).split('\n');
+  var lh = size * 1.3;
+  var startY = y - (lines.length - 1) * lh / 2;
+  for (var i = 0; i < lines.length; i++) {
+    ctx.fillText(lines[i], x, startY + i * lh);
+  }
+}
+
+/* ── 分步动画脚手架 ──
+   spec.steps：总步数；spec.stepMs：每步时长；
+   spec.draw(ctx, w, h, step, t)：按当前步 step 和步内进度 t(0→1) 绘制。
+   自动接管 <id>-play / <id>-step / <id>-reset 三个按钮，
+   默认自动播放、循环，滚出视口自动暂停。 */
+function setupAnim(id, spec) {
+  var anim = { step: 0, t: 0, playing: true };
+  var steps = spec.steps || 4;
+  var stepMs = spec.stepMs || 1300;
+  var view = setupCanvas(id, function (ctx, w, h) {
+    spec.draw(ctx, w, h, anim.step, anim.t);
+  });
+  if (!view) return null;
+
+  var visible = true, rafId = null, last = 0;
+  function syncPlay() {
+    var b = document.getElementById(id + '-play');
+    if (b) b.textContent = anim.playing ? '⏸ 暂停' : '▶ 播放';
+  }
+  function loop(ts) {
+    rafId = null;
+    if (!anim.playing || !visible) return;
+    if (!last) last = ts;
+    anim.t += (ts - last) / stepMs;
+    last = ts;
+    while (anim.t >= 1) { anim.t -= 1; anim.step = (anim.step + 1) % steps; }
+    view.paint();
+    rafId = requestAnimationFrame(loop);
+  }
+  function start() {
+    if (rafId == null && anim.playing && visible) { last = 0; rafId = requestAnimationFrame(loop); }
+  }
+  function stop() { if (rafId != null) { cancelAnimationFrame(rafId); rafId = null; } }
+
+  var playBtn = document.getElementById(id + '-play');
+  if (playBtn) playBtn.addEventListener('click', function () {
+    anim.playing = !anim.playing;
+    syncPlay();
+    if (anim.playing) start(); else stop();
+  });
+  var stepBtn = document.getElementById(id + '-step');
+  if (stepBtn) stepBtn.addEventListener('click', function () {
+    anim.playing = false; syncPlay(); stop();
+    anim.step = (anim.step + 1) % steps; anim.t = 0;
+    view.paint();
+  });
+  var resetBtn = document.getElementById(id + '-reset');
+  if (resetBtn) resetBtn.addEventListener('click', function () {
+    anim.step = 0; anim.t = 0; anim.playing = true;
+    syncPlay(); start();
+  });
+
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      visible = entries[0].isIntersecting;
+      if (visible) start(); else stop();
+    }, { threshold: 0.15 }).observe(view.canvas);
+  }
+
+  start();
+  return { anim: anim, view: view, start: start, stop: stop };
+}
+
+/* ==================== 示例图表（替换成实际内容） ==================== */
+
+/* 静态示意图示例：三个概念框 + 箭头 */
+setupCanvas('canvas-demo-static', function (ctx, w, h) {
+  var c = getColors();
+  var bw = 150, bh = 64, y = h / 2 - bh / 2;
+  drawBox(ctx, 40, y, bw, bh, '概念 A', c.primaryLight, c.primary, c.primary, 15);
+  drawArrow(ctx, 40 + bw + 8, h / 2, 40 + bw + 62, h / 2, c.muted, 2);
+  drawBox(ctx, 250, y, bw, bh, '概念 B', c.accentLight, c.accent, c.accent, 15);
+  drawArrow(ctx, 250 + bw + 8, h / 2, 250 + bw + 62, h / 2, c.muted, 2);
+  drawBox(ctx, 460, y, bw, bh, '概念 C', c.greenLight, c.green, c.green, 15);
+  drawLabel(ctx, w / 2, 36, '（示意，非实际数量）', c.light, 12);
+});
+
+/* 分步动画示例：四步流程，当前步高亮，小球在节点间移动 */
+setupAnim('canvas-demo-anim', {
+  steps: 4,
+  stepMs: 1300,
+  draw: function (ctx, w, h, step, t) {
+    var c = getColors();
+    var labels = ['① 你派活', '② 它想', '③ 它干', '④ 回报你'];
+    var themes = [
+      [c.primaryLight, c.primary],
+      [c.accentLight, c.accent],
+      [c.greenLight, c.green],
+      [c.purpleLight, c.purple]
+    ];
+    var bw = 130, bh = 60, gap = (w - 4 * bw) / 5, y = h / 2 - bh / 2;
+    function cx(i) { return gap + i * (bw + gap) + bw / 2; }
+
+    /* 节点间的静态箭头 */
+    for (var i = 0; i < 3; i++) {
+      drawArrow(ctx, cx(i) + bw / 2 + 6, h / 2, cx(i + 1) - bw / 2 - 6, h / 2, c.border, 2);
+    }
+    /* 节点：当前步高亮，其余变暗 */
+    for (var j = 0; j < 4; j++) {
+      var hot = (j === step);
+      drawBox(ctx, cx(j) - bw / 2, y, bw, bh, labels[j],
+        hot ? themes[j][0] : c.surface,
+        hot ? themes[j][1] : c.border,
+        hot ? themes[j][1] : c.light, 14);
+    }
+    /* 移动小球：从当前节点滑向下一节点（末步回到起点，形成循环） */
+    var from = cx(step), to = cx((step + 1) % 4);
+    var ease = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+    var x = from + (to - from) * ease;
+    ctx.fillStyle = themes[step][1];
+    ctx.beginPath();
+    ctx.arc(x, h / 2 - 44, 7, 0, Math.PI * 2);
+    ctx.fill();
+    drawLabel(ctx, w / 2, h - 24, '第 ' + (step + 1) + ' 步 / 共 4 步', c.muted, 12);
+  }
+});
+
+/* ── 主题切换 ── */
+document.addEventListener('DOMContentLoaded', function () {
+  var html = document.documentElement;
+  document.querySelectorAll('.theme-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var theme = this.getAttribute('data-theme');
+      html.setAttribute('data-theme', theme);
+      localStorage.setItem('dd-theme', theme);
+      __redraws.forEach(function (fn) { fn(); }); // 切换主题时重绘图表
+    });
+  });
+});
+</script>
+</body>
+</html>

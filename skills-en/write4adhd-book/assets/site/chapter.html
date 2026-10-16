@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter N · Chapter Title - Book Title</title>
+<!-- Anti-flash: restore the theme before the first paint -->
+<script>
+(function(){var t=localStorage.getItem('dd-theme');if(!t)t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.setAttribute('data-theme',t);})();
+</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="theme-switcher">
+  <button class="theme-btn" data-theme="light" aria-label="Light mode" title="Light mode">☀️</button>
+  <button class="theme-btn" data-theme="dark" aria-label="Dark mode" title="Dark mode">🌙</button>
+</div>
+
+<div class="container">
+
+<a class="back-link" href="index.html">← Contents</a>
+
+<header class="chapter-head">
+  <!-- For a bonus page, change the badge text to "Bonus" -->
+  <span class="badge">Chapter N</span>
+  <h1>Chapter title (plainly name what this chapter covers - no metaphor)</h1>
+  <p class="subtitle">Chapter intro: one sentence of soft recap of the previous chapter + one sentence naming the problem this chapter solves</p>
+</header>
+
+<!-- 1-3 sections per page. Every section is still: small quick steps + paragraphs of no more
+     than 4 lines + a diagram + a closing line.
+     A chapter page reads standalone: a reader who lands here mid-book catches the main thread
+     through the soft recap in the intro. -->
+<section>
+  <h2><span class="num">N.1</span> Section title</h2>
+
+  <p>Body text. <strong>Bold the keywords</strong>; one idea per paragraph.</p>
+
+  <div class="callout">
+    <p><strong>"The objection most likely popping into the reader's head right now?"</strong> — catch it immediately and answer it with an everyday analogy.</p>
+  </div>
+
+  <div class="diagram-wrap">
+    <canvas id="canvas-ch1-demo" width="680" height="260"></canvas>
+    <p class="caption">Plain-words caption: say what this diagram wants you to see, never "Figure 1: XX architecture"</p>
+  </div>
+
+  <p>Closing line for the section: <strong>One summary that stands on its own (let the shape follow the content - "Bottom line:" is not mandatory).</strong></p>
+</section>
+
+<section>
+  <h2><span class="num">N.2</span> Section title</h2>
+
+  <p>For a process that needs animation: put a three-button .anim-bar under the canvas (ids follow the
+  &lt;canvas-id&gt;-play / -step / -reset convention), then hand it to setupAnim().</p>
+
+  <p>Closing line for the chapter: <strong>It's not X, it's Y.</strong></p>
+</section>
+
+<!-- Previous / Contents / Next: so the reader always knows where they are and where to go -->
+<nav class="pager">
+  <a href="ch1.html">← Previous: title</a>
+  <a href="index.html">Contents</a>
+  <a href="ch3.html">Next: title →</a>
+</nav>
+
+<div class="end-mark">· · ·</div>
+
+<footer>Published under CC BY 4.0 · optional colophon</footer>
+
+</div>
+
+<script src="shared.js"></script>
+<script>
+/* Diagram code specific to this page. The helpers (setupCanvas / setupAnim / drawBox /
+   drawArrow / drawLabel / getColors) all live in shared.js. */
+
+setupCanvas('canvas-ch1-demo', function (ctx, w, h) {
+  var c = getColors();
+  var bw = 150, bh = 64, y = h / 2 - bh / 2;
+  drawBox(ctx, 40, y, bw, bh, 'Concept A', c.primaryLight, c.primary, c.primary, 15);
+  drawArrow(ctx, 40 + bw + 8, h / 2, 40 + bw + 62, h / 2, c.muted, 2);
+  drawBox(ctx, 250, y, bw, bh, 'Concept B', c.accentLight, c.accent, c.accent, 15);
+  drawArrow(ctx, 250 + bw + 8, h / 2, 250 + bw + 62, h / 2, c.muted, 2);
+  drawBox(ctx, 460, y, bw, bh, 'Concept C', c.greenLight, c.green, c.green, 15);
+  drawLabel(ctx, w / 2, 36, '(illustrative, not to scale)', c.light, 12);
+});
+</script>
+</body>
+</html>
